@@ -1,4 +1,0 @@
-# ★ TEST DEPLOY ONLY — blocks all indexing on every file.
-#   DELETE this file before the real launch (see README).
-/*
-  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
