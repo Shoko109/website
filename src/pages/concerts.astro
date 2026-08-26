@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import Concert from '../components/Concert.astro';
+import concerts from '../data/concerts.json';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: '演奏会情報',
+  itemListElement: concerts.upcoming.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'MusicEvent',
+      name: c.title,
+      performer: [
+        { '@type': 'Person', name: '前田河翔子' },
+        ...(c.collaborators || []).map((n) => ({ '@type': 'Person', name: n })),
+      ],
+      location: { '@type': 'Place', name: c.venue, address: c.area },
+    },
+  })),
+};
+---
+<Base
+  title="演奏会情報｜鶴川はるな坂ピアノ教室（町田市金井・鶴川駅）"
+  description="鶴川はるな坂ピアノ教室 講師・前田河翔子（ピアニスト）の演奏会情報。ソロリサイタルや室内楽、歌曲の伴奏など、出演する演奏会のご案内です。"
+  path="/concerts/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <div class="page-hero">
+    <span class="kanji" aria-hidden="true">音</span>
+    <h1>演奏会情報<span class="en">CONCERTS</span></h1>
+    <p>{concerts.intro}</p>
+  </div>
+
+  <div class="wrap concerts">
+
+    <section class="concert-section reveal">
+      <h2 class="stitle">今後の演奏会<span class="en">UPCOMING</span></h2>
+      {concerts.upcoming.length > 0 ? (
+        <div class="concert-list">
+          {concerts.upcoming.map((c) => <Concert concert={c} />)}
+        </div>
+      ) : (
+        <p class="area-note" style="margin-top:34px;">現在、予定されている演奏会はありません。決まり次第こちらでお知らせいたします。</p>
+      )}
+    </section>
+
+    {concerts.past.length > 0 && (
+      <section class="concert-section reveal">
+        <h2 class="stitle">これまでの演奏会<span class="en">PAST</span></h2>
+        <div class="concert-list past">
+          {concerts.past.map((c) => <Concert concert={c} />)}
+        </div>
+      </section>
+    )}
+
+  </div>
+
+  <div class="keys-divider" aria-hidden="true"></div>
+  <div class="cta-band">
+    <h2>体験レッスン受付中です</h2>
+    <p>演奏会でお会いできることを、そしてレッスンでお会いできることを楽しみにしています。</p>
+    <a class="btn" href="/contact/">お問い合わせ・体験レッスン申込</a>
+  </div>
+</Base>

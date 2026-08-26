@@ -1,0 +1,50 @@
+---
+interface ConcertItem {
+  date: string;
+  time?: string;
+  image?: string;
+  title: string;
+  venue: string;
+  area?: string;
+  collaborators?: string[];
+  program?: string[];
+  link?: string;
+  linkLabel?: string;
+}
+const { concert } = Astro.props as { concert: ConcertItem };
+const c = concert;
+---
+<article class="concert">
+  <div class="when">
+    {c.image && (
+      <div class="flyer"><img src={c.image} alt={`${c.title}のちらし`} loading="lazy" width="320" height="440"></div>
+    )}
+    <div class="when-text">
+      <p class="date">{c.date}</p>
+      {c.time && <p class="time">{c.time}</p>}
+    </div>
+  </div>
+  <div class="detail">
+    <h3>{c.title}</h3>
+    <p class="venue">{c.venue}{c.area && <span class="area">{c.area}</span>}</p>
+
+    {c.collaborators && c.collaborators.length > 0 && (
+      <p class="with">{c.collaborators.join('｜')}</p>
+    )}
+
+    {c.program && c.program.length > 0 && (
+      <div class="program">
+        <span class="plabel">プログラム</span>
+        <ul>
+          {c.program.map((piece) => <li>{piece}</li>)}
+        </ul>
+      </div>
+    )}
+
+    {c.link && (
+      <p class="more">
+        <a href={c.link} target="_blank" rel="noopener">{c.linkLabel || '詳細を見る'} <span class="ext">↗</span></a>
+      </p>
+    )}
+  </div>
+</article>

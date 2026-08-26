@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import HomeSections from '../components/HomeSections.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicSchool',
+  name: site.name,
+  description: '町田市金井・小田急線鶴川駅のピアノ教室。お子さまから大人の方まで、のびのびと音楽を楽しめる個人レッスンを行っています。',
+  url: Astro.site?.href,
+  image: new URL('/images/hero.jpg', Astro.site).href,
+  email: site.email,
+  priceRange: '¥1,000～¥10,000',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '金井3丁目',
+    addressLocality: '町田市',
+    addressRegion: '東京都',
+    addressCountry: 'JP',
+  },
+  areaServed: ['鶴川', '金井', '能ヶ谷', '薬師台', '玉川学園', '柿生', '町田市', '川崎市麻生区'],
+  founder: {
+    '@type': 'Person',
+    name: '前田河翔子',
+    jobTitle: 'ピアノ講師・ピアニスト',
+  },
+  sameAs: [site.blogUrl, 'https://tsurukawapiano.amebaownd.com'],
+};
+---
+<Base
+  title="鶴川はるな坂ピアノ教室｜町田市金井・小田急線鶴川駅のピアノ教室"
+  description="町田市金井（小田急線・鶴川駅）のピアノ教室。お子さまから大人の方まで、のびのびと音楽を楽しみながら学べる丁寧な個人レッスン。体験レッスン受付中。駐車場あり。玉川学園・柿生・能ヶ谷エリアからも通えます。"
+  path="/"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <HomeSections />
+</Base>

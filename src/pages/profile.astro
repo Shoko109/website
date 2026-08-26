@@ -1,0 +1,66 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import profile from '../data/profile.json';
+import { resolveImage } from '../lib/images';
+import fallbackProfileImage from '../images/uploads/profile.jpg';
+
+const profileImage = resolveImage(profile.image, fallbackProfileImage);
+const ogImage = await getImage({ src: profileImage, width: 1200 });
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: '前田河翔子',
+  alternateName: 'Shoko Maedako',
+  jobTitle: 'ピアノ講師・ピアニスト',
+  image: new URL(ogImage.src, Astro.site).href,
+  worksFor: {
+    '@type': 'MusicSchool',
+    name: site.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '金井3丁目',
+      addressLocality: '町田市',
+      addressRegion: '東京都',
+      addressCountry: 'JP',
+    },
+  },
+  alumniOf: ['東京都立芸術高校 作曲科', '東京音楽大学 ピアノ科', 'ドイツ国立ミュンスター音楽大学大学院 ピアノ科'],
+  sameAs: [site.blogUrl],
+};
+---
+<Base
+  title="講師プロフィール｜鶴川はるな坂ピアノ教室（町田市金井・鶴川駅）"
+  description="鶴川はるな坂ピアノ教室（町田市金井・小田急線鶴川駅）講師・前田河翔子のプロフィール。東京音楽大学ピアノ科、ドイツ国立ミュンスター音楽大学大学院卒業。演奏活動と共に、鶴川で丁寧なピアノレッスンを行っています。"
+  path="/profile/"
+  ogType="profile"
+  ogImage={ogImage.src}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <div class="page-hero">
+    <span class="kanji" aria-hidden="true">奏</span>
+    <h1>講師プロフィール<span class="en">PROFILE</span></h1>
+    <p>鶴川はるな坂ピアノ教室（町田市金井・小田急線鶴川駅）</p>
+  </div>
+
+  <div class="wrap">
+    <div class="profile-grid">
+      <div class="profile-photo">
+        <Image src={profileImage} alt="鶴川はるな坂ピアノ教室 講師 前田河翔子（Shoko Maedako）のポートレート写真"
+               width={1200} fetchpriority="high" loading="eager" decoding="async" />
+      </div>
+      <div class="profile-body">
+        <h2 class="profile-name">{profile.name}<span class="en">{profile.nameEn}</span></h2>
+
+        {profile.bio.map((paragraph) => <p>{paragraph}</p>)}
+
+        <div class="profile-tags">
+          {profile.tags.map((tag) => <span>{tag}</span>)}
+        </div>
+      </div>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,29 @@
+# Netlify configuration — Astro build.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# ============================================================
+# ★ TEST DEPLOY ONLY: blocks ALL indexing (search engines, AI
+#   bots, archives) via HTTP header on every file.
+#   DELETE this block before the real launch (see README).
+# ============================================================
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive, nosnippet, noimageindex"
+
+# The /admin CMS should never be indexed, even after launch.
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Cache images aggressively; HTML stays fresh.
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

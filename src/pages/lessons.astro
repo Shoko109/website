@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import lessons from '../data/lessons.json';
+
+const photos = lessons.photos.filter((p) => p.image);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ImageGallery',
+  name: 'レッスンの様子｜鶴川はるな坂ピアノ教室',
+  description: lessons.intro,
+  image: photos.map((p) => ({
+    '@type': 'ImageObject',
+    contentUrl: new URL(p.image, Astro.site).href,
+    name: p.title,
+    description: p.text,
+  })),
+};
+---
+<Base
+  title="レッスンの様子｜鶴川はるな坂ピアノ教室（町田市金井・鶴川駅）"
+  description="鶴川はるな坂ピアノ教室（町田市金井・小田急線鶴川駅）のレッスンの様子を写真でご紹介します。グランドピアノのレッスン室、お子さまのレッスン、ソルフェージュ、連弾、発表会のようす。"
+  path="/lessons/"
+  ogImage={photos.length > 0 ? photos[0].image : undefined}
+>
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin slot="head" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <div class="page-hero">
+    <span class="kanji" aria-hidden="true">響</span>
+    <h1>レッスンの様子<span class="en">ABOUT THE LESSONS</span></h1>
+    <p>鶴川はるな坂ピアノ教室（町田市金井・小田急線鶴川駅）</p>
+  </div>
+
+  <div class="wrap lessons">
+
+    <p class="lessons-intro reveal">{lessons.intro}</p>
+
+    <div class="gallery">
+      {photos.map((p, i) => (
+        <figure class={`shot reveal${i === 0 ? ' wide' : ''}`}>
+          <div class="frame">
+            <img
+              src={p.image}
+              alt={`${p.title}｜鶴川はるな坂ピアノ教室のレッスンの様子`}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              width="640"
+              height="420"
+            >
+          </div>
+          <figcaption>
+            <p class="cap-title">{p.title}</p>
+            {p.text && <p class="cap-text">{p.text}</p>}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+
+    {lessons.outro && <p class="lessons-outro reveal">{lessons.outro}</p>}
+
+  </div>
+
+  <div class="keys-divider" aria-hidden="true"></div>
+  <div class="cta-band">
+    <h2>体験レッスン受付中です</h2>
+    <p>写真の雰囲気そのままの教室で、お待ちしています。</p>
+    <a class="btn" href="/contact/">お問い合わせ・体験レッスン申込</a>
+  </div>
+</Base>

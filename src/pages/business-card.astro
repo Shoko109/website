@@ -1,0 +1,258 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import profile from '../data/profile.json';
+import home from '../data/home.json';
+
+// 名刺の見本（91mm × 55mm ＝ 日本の標準サイズ）
+// 表・裏の内容は、サイトのデータ（site.json / profile.json / home.json）から作っています。
+// ★ 名刺だけで使う連絡先です。本番の番号・ドメインに直してください。
+//    （電話番号は、いまは仮の番号を入れてあります）
+const cardPhone = '042-860-1234';
+const cardSite = 'shokomaedako.com';
+
+// 講師名から、ふりがなの部分（例：（まえだこ しょうこ））を外して漢字だけにします
+const nameKanji = profile.name.replace(/（.+?）$/, '');
+---
+<Base
+  title="名刺デザイン見本｜鶴川はるな坂ピアノ教室"
+  description="鶴川はるな坂ピアノ教室の名刺デザイン見本（91mm×55mm）。ホームページと同じデザイン・情報で作成しています。"
+  path="/business-card/"
+  noindex={true}
+>
+  <div class="page-hero">
+    <span class="kanji" aria-hidden="true">名</span>
+    <h1>名刺デザイン見本<span class="en">BUSINESS CARD</span></h1>
+    <p>ホームページと同じ色・書体で作った名刺の見本です（91mm × 55mm）。</p>
+  </div>
+
+  <div class="wrap bc-wrap">
+
+    <!-- ================= 表面 ================= -->
+    <section class="bc-block">
+      <p class="bc-label">表面<span>FRONT</span></p>
+
+      <div class="bc-stage">
+        <div class="bc-card bc-front">
+
+          <!-- 左側：講師名 → 連絡先の順に、上から下へ -->
+          <div class="bc-col">
+
+            <div class="bc-person">
+              <p class="bc-role">ピアノ講師</p>
+              <p class="bc-name">{nameKanji}</p>
+              <p class="bc-name-en">{profile.nameEn}</p>
+            </div>
+
+            <!-- 連絡先。左に小さな見出しをつけて、行の頭をそろえます -->
+            <ul class="bc-contact">
+              <li><span class="k">電話</span><span class="v">{cardPhone}</span></li>
+              <li><span class="k">メール</span><span class="v">{site.email}</span></li>
+              <li><span class="k">サイト</span><span class="v">{cardSite}</span></li>
+            </ul>
+
+          </div>
+
+          <!-- 右側：先生の絵（背景の色はつけません） -->
+          <div class="bc-aside" aria-hidden="true">
+            <img class="bc-portrait" src="/images/shoko-portrait.png"
+                 alt="" width="835" height="1000">
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 裏面 ================= -->
+    <section class="bc-block">
+      <p class="bc-label">裏面<span>BACK</span></p>
+
+      <div class="bc-stage">
+        <div class="bc-card bc-back">
+          <!-- まんなかに、教室の名前と住所だけを置きます -->
+          <div class="bc-back-brand">
+            <img class="bc-mark" src="/images/rose-mark.svg" alt="" width="32" height="32">
+            <p class="bc-brand-jp">{site.name}</p>
+            <p class="bc-brand-en">{site.nameEn}</p>
+            <p class="bc-back-address">{home.access.address}<br>{home.access.station}</p>
+          </div>
+
+          <!-- 下の縁に鍵盤 -->
+          <span class="bc-keys" aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="keys-divider" aria-hidden="true"></div>
+  <div class="cta-band">
+    <h2>{home.ctaBand.title}</h2>
+    <p>{home.ctaBand.text}</p>
+    <a class="btn" href="/contact/">お問い合わせ・体験レッスン申込</a>
+  </div>
+
+  <style>
+    /* 名刺の見本
+       カードの中の文字や余白は、すべてカードの幅（--w）を基準にした割合で
+       決めています。画面が小さくても、実物と同じ見た目のまま縮みます。 */
+    .bc-wrap { padding-top: 64px; }
+    .bc-block { margin-bottom: 60px; }
+    .bc-block:last-child { margin-bottom: 0; }
+
+    .bc-label {
+      font-family: "Shippori Mincho", serif; font-size: .95rem;
+      letter-spacing: .24em; color: var(--green);
+      border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 26px;
+    }
+    .bc-label span {
+      font-family: Georgia, serif; font-size: .58rem; letter-spacing: .32em;
+      color: var(--brass); margin-left: 14px;
+    }
+
+    .bc-stage { display: flex; justify-content: center; padding: 18px 0 6px; }
+
+    .bc-card {
+      /* 画面では少し大きめに見せています。
+         印刷のときは、下の @media print で実寸（91mm）に戻します。 */
+      --w: 112mm;
+      --pad-y: calc(var(--w) * .052);
+      --pad-x: calc(var(--w) * .062);
+      width: var(--w); height: calc(var(--w) * 55 / 91);
+      position: relative; overflow: hidden;
+      font-family: "Noto Serif JP", serif; line-height: 1.5;
+      background: #fff; color: var(--ink);
+      box-shadow: 0 10px 34px rgba(124, 47, 74, .13), 0 1px 0 var(--line);
+    }
+    @media (max-width: 900px) {
+      .bc-card { --w: min(112mm, calc(100vw - 52px)); }
+    }
+    /* カードの中のバラの印。大きさは置く場所ごとに決めます */
+    .bc-mark { display: block; width: 100%; height: auto; }
+
+    /* ---------- 表面 ---------- */
+    /* 左の「文字の列」と、右の「絵」の2列組みです */
+    .bc-front {
+      border: 1px solid var(--line);
+      display: grid; grid-template-columns: 1fr calc(var(--w) * .30);
+    }
+    .bc-col {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: var(--pad-y) 0 var(--pad-y) var(--pad-x);
+      min-width: 0;
+    }
+
+    /* 講師名。ホームページの見出しと同じ組み立てにしています。 */
+    .bc-role {
+      font-size: calc(var(--w) * .019); letter-spacing: .34em; color: var(--ink-soft);
+    }
+    .bc-name {
+      font-family: "Shippori Mincho", serif; font-weight: 600;
+      font-size: calc(var(--w) * .064); letter-spacing: .14em; line-height: 1.25;
+      margin-top: calc(var(--w) * .017);
+    }
+    .bc-name-en {
+      font-family: Georgia, serif; font-size: calc(var(--w) * .0175);
+      letter-spacing: .34em; color: var(--brass);
+      margin-top: calc(var(--w) * .015);
+    }
+
+    /* 連絡先。上に細い罫線を引き、その左はしに短い真鍮色のしるしを置きます
+       （ホームページの見出しの罫線と、まったく同じ作りです） */
+    .bc-contact {
+      position: relative; list-style: none;
+      margin-top: calc(var(--w) * .052);
+      padding-top: calc(var(--w) * .042);
+      border-top: 1px solid var(--line);
+    }
+    .bc-contact::before {
+      content: ""; position: absolute; left: 0; top: -1px;
+      width: calc(var(--w) * .076); height: 1px; background: var(--brass);
+    }
+    .bc-contact li {
+      display: grid; grid-template-columns: calc(var(--w) * .056) 1fr;
+      gap: 0 calc(var(--w) * .026);
+      font-size: calc(var(--w) * .0185); line-height: 1.7;
+      margin-top: calc(var(--w) * .011);
+    }
+    .bc-contact li:first-child { margin-top: 0; }
+    .bc-contact .k {
+      font-size: calc(var(--w) * .0135);
+      letter-spacing: .06em; color: var(--brass); white-space: nowrap;
+      padding-top: calc(var(--w) * .004);
+    }
+    .bc-contact .v { color: var(--ink); letter-spacing: .04em; overflow-wrap: anywhere; }
+
+    /* 右の先生の絵（背景の色はつけず、紙の上に直接置きます）。
+       ★ max-width を外さないと、全体の img の指定に引っぱられて
+         横だけ縮んでしまう（＝つぶれて見える）ので注意してください。 */
+    .bc-aside { position: relative; }
+    .bc-portrait {
+      position: absolute; right: calc(var(--w) * .012); bottom: 0;
+      width: calc(var(--w) * .275); height: auto; max-width: none;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 99%);
+              mask-image: linear-gradient(to bottom, #000 72%, transparent 99%);
+    }
+
+    /* ---------- 裏面 ---------- */
+    /* まんなかに教室名と住所、下の縁に鍵盤。ほかには何も置きません。 */
+    .bc-back {
+      background: var(--footer-pink); border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      padding: var(--pad-y) var(--pad-x) calc(var(--w) * .055);
+    }
+
+    /* 裏のまんなかの教室名 */
+    .bc-back-brand { text-align: center; }
+    .bc-back-brand .bc-mark {
+      width: calc(var(--w) * .072); margin: 0 auto calc(var(--w) * .022);
+    }
+    /* 色と書体は、ホームページの上の帯の教室名とそろえています */
+    .bc-back-brand .bc-brand-jp {
+      font-family: "Shippori Mincho", serif; font-weight: 600;
+      font-size: calc(var(--w) * .0295); letter-spacing: .12em; line-height: 1.4;
+      color: var(--green-deep);
+    }
+    .bc-back-brand .bc-brand-en {
+      font-family: Georgia, serif;
+      font-size: calc(var(--w) * .014); letter-spacing: .22em;
+      margin-top: calc(var(--w) * .008);
+      color: var(--brass);
+    }
+    /* 線の下の、教室の住所 */
+    .bc-back-address {
+      font-size: calc(var(--w) * .0165); line-height: 1.8; letter-spacing: .04em;
+      color: var(--ink); margin-top: calc(var(--w) * .026);
+      padding-top: calc(var(--w) * .022);
+      border-top: 1px solid rgba(195, 79, 111, .22);
+    }
+
+    /* 下の縁いっぱいに、鍵盤（ホームページの区切りの飾りと同じ絵） */
+    .bc-keys {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      height: calc(var(--w) * .036); pointer-events: none;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='154' height='30'%3E%3Cg stroke='%23d98fa8' fill='none'%3E%3Cpath d='M0 .5h154M0 29.5h154M.5 0v30M22 0v30M44 0v30M66 0v30M88 0v30M110 0v30M132 0v30M153.5 0v30'/%3E%3C/g%3E%3Cg fill='%23c34f6f'%3E%3Crect x='17' width='10' height='18'/%3E%3Crect x='39' width='10' height='18'/%3E%3Crect x='83' width='10' height='18'/%3E%3Crect x='105' width='10' height='18'/%3E%3Crect x='127' width='10' height='18'/%3E%3C/g%3E%3C/svg%3E") repeat-x center bottom / auto 100%;
+      opacity: .38;
+    }
+
+    /* ---------- 印刷（実寸で表・裏を1枚ずつ） ---------- */
+    @media print {
+      @page { size: 91mm 55mm; margin: 0; }
+
+      .topbar, .mobile-head, .mobile-bar, .mobile-nav, .page-hero, .keys-divider,
+      .cta-band, .site-footer, .bc-label { display: none !important; }
+      .bc-wrap { padding: 0; max-width: none; }
+      .bc-block { margin: 0; page-break-after: always; }
+      .bc-block:last-child { page-break-after: auto; }
+      .bc-stage { padding: 0; }
+
+      /* 紙のふちまで、実寸ぴったりで刷ります */
+      .bc-card {
+        --w: 91mm !important;
+        box-shadow: none; border: none;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+    }
+  </style>
+</Base>

@@ -1,0 +1,199 @@
+---
+import site from '../data/site.json';
+import RoseMark from '../components/RoseMark.astro';
+
+// ★★★ テスト公開中フラグ：本公開のときは false にしてください！
+//     （全ページに noindex メタタグが入ります。netlify.toml と
+//       public/_headers・public/robots.txt も忘れずに直すこと → README参照）
+const STEALTH = true;
+
+interface Props {
+  title: string;
+  description: string;
+  path: string; // 例: "/" や "/profile/"
+  ogType?: string;
+  ogImage?: string;
+  noindex?: boolean; // thanks ページなど、常に noindex にしたいページ用
+  bare?: boolean; // true ならサイドバー・ナビなしの最小構成（thanks ページ用）
+}
+
+const { title, description, path, ogType = 'website', ogImage = '/images/hero.jpg', noindex = false, bare = false } = Astro.props;
+const canonical = new URL(path, Astro.site).href;
+const ogImageAbs = new URL(ogImage, Astro.site).href;
+
+const nav = [
+  { href: '/', label: 'ホーム' },
+  { href: '/#lesson', label: 'レッスン・料金' },
+  { href: '/lessons/', label: 'レッスンの様子' },
+  { href: '/profile/', label: '講師プロフィール' },
+  { href: '/concerts/', label: '演奏会情報' },
+  { href: '/#access', label: 'アクセス' },
+];
+const footerSeoLines = site.footerSeo.split('\n');
+
+// いま見ているページのメニューに印をつけます（「/」だけはトップページ完全一致）
+const isCurrent = (href: string) => (href.startsWith('/#') ? false : href === path);
+
+// パソコン用の上の帯だけは、項目をまとめて短くしています。
+// 「ホーム」は左のロゴが同じ役目をするので入れていません。
+// （スマホのメニューとフッターは、上の nav をそのまま平らに並べます）
+const topNav = [
+  {
+    label: 'レッスン',
+    children: [
+      { href: '/#lesson', label: 'レッスン・料金' },
+      { href: '/lessons/', label: 'レッスンの様子' },
+    ],
+  },
+  {
+    label: '教室について',
+    children: [
+      { href: '/profile/', label: '講師プロフィール' },
+      { href: '/#access', label: 'アクセス' },
+    ],
+  },
+  { href: '/concerts/', label: '演奏会情報' },
+];
+// まとめの中の1つを見ているときは、まとめの見出しにも印をつけます
+const groupIsCurrent = (item: any) =>
+  Array.isArray(item.children) && item.children.some((c: any) => isCurrent(c.href));
+---
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {(STEALTH || noindex) && <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">}
+
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonical}>
+
+  <meta property="og:type" content={ogType}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={ogImageAbs}>
+  <meta property="og:locale" content="ja_JP">
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#c34f6f">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
+
+  <slot name="head" />
+</head>
+<body>
+
+  {!bare && (
+    <>
+      <!-- ================= 上の帯（パソコン用・全ページ共通） =================
+           左に教室の名前、右にメニュー。ぜんぶ横1列です。
+           下にスクロールすると、script.js が .is-scrolled を付けて
+           背景がうすいピンクのグラデーションに変わります。 -->
+      <header class="topbar">
+        <a class="top-brand" href="/">
+          <RoseMark />
+          <span class="top-name">{site.name}</span>
+          <span class="top-en">{site.nameEn}</span>
+        </a>
+        <nav class="top-nav" aria-label="メインメニュー">
+          {topNav.map((item) => (
+            item.children ? (
+              <div class="nav-group">
+                <button type="button" class="nav-trigger" aria-expanded="false"
+                        data-current={groupIsCurrent(item) ? 'true' : undefined}>
+                  {item.label}<span class="caret" aria-hidden="true"></span>
+                </button>
+                <div class="nav-menu">
+                  {item.children.map((c) => (
+                    <a href={c.href} aria-current={isCurrent(c.href) ? 'page' : undefined}>{c.label}</a>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+            )
+          ))}
+          <a href={site.blogUrl} target="_blank" rel="noopener">ブログ <span class="ext" aria-hidden="true">↗</span></a>
+          <a class="top-cta" href="/contact/">体験レッスン申込</a>
+        </nav>
+      </header>
+
+      <!-- ================= スマホ用ヘッダー（全ページ共通） ================= -->
+      <div class="mobile-head">
+        <header class="mobile-bar">
+          <a class="brand" href="/">
+            <RoseMark />
+            {/* せまい画面では「鶴川はるな坂／ピアノ教室」で折り返します */}
+            <span>鶴川はるな坂<wbr />ピアノ教室</span>
+          </a>
+          <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav">
+            <span class="menu-label">メニュー</span>
+          </button>
+        </header>
+        <nav class="mobile-nav" id="mobile-nav" aria-label="メインメニュー">
+          {nav.map((item) => <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>)}
+          <a href={site.blogUrl} target="_blank" rel="noopener">ブログ（note）</a>
+          <a class="cta" href="/contact/">体験レッスン申込</a>
+        </nav>
+      </div>
+    </>
+  )}
+
+  {bare ? (
+    <>
+      <header class="mobile-bar bare-bar">
+        <a class="brand" href="/">
+          <RoseMark />
+          <span>鶴川はるな坂<wbr />ピアノ教室</span>
+        </a>
+      </header>
+
+      <slot />
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <p class="fbrand">{site.name}<small>{site.nameEn}</small></p>
+          <p class="copyright">Copyright © 2026 {site.name}</p>
+        </div>
+      </footer>
+    </>
+  ) : (
+    <div class="main">
+
+      <slot />
+
+      <!-- ================= フッター（全ページ共通） ================= -->
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <p class="fbrand">{site.name}<small>{site.nameEn}</small></p>
+          <nav class="footer-nav">
+            {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+            <a href={site.blogUrl} target="_blank" rel="noopener">ブログ（note）</a>
+            <a href="/contact/">お問い合わせ</a>
+          </nav>
+          <p class="footer-seo">
+            {footerSeoLines.map((line, i) => (
+              <>
+                {i > 0 && <br />}
+                {line}
+              </>
+            ))}
+          </p>
+          <p class="copyright">Copyright © 2026 {site.name}</p>
+        </div>
+      </footer>
+
+    </div>
+  )}
+
+</body>
+</html>

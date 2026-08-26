@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import contact from '../data/contact.json';
+---
+<Base
+  title="お問い合わせ・体験レッスン申込｜鶴川はるな坂ピアノ教室（町田市金井・鶴川駅）"
+  description="鶴川はるな坂ピアノ教室（町田市金井・小田急線鶴川駅）へのお問い合わせ・体験レッスンのお申し込みはこちら。体験レッスン30〜45分 1,000円。お子さまから大人の方まで受付中です。"
+  path="/contact/"
+>
+  <div class="page-hero">
+    <span class="kanji" aria-hidden="true">縁</span>
+    <h1>お問い合わせ・体験レッスン申込<span class="en">CONTACT</span></h1>
+    <p>{contact.pageLead}</p>
+  </div>
+
+  <div class="wrap">
+    <div class="contact-grid">
+
+      <!-- ================= お問い合わせフォーム =================
+           このフォームは Netlify Forms を使っています。
+           送信内容は Netlify の管理画面（Forms）に届き、
+           メール通知の設定もできます（README参照）。 -->
+      <form class="contact-form" name="contact" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contact">
+        <p style="display:none;"><label>入力しないでください: <input name="bot-field"></label></p>
+
+        <label>お名前（ふりがなもお願いします）<span class="req">必須</span>
+          <input type="text" name="お名前" required placeholder="例）山田 花子（やまだ はなこ）">
+        </label>
+
+        <label>年齢<span class="req">必須</span>
+          <input type="text" name="年齢" required placeholder="例）6歳 / 35歳">
+        </label>
+
+        <label>メールアドレス<span class="req">必須</span>
+          <input type="email" name="メールアドレス" required placeholder="例）example@email.com">
+        </label>
+
+        <label>ピアノのご経験
+          <select name="ピアノのご経験">
+            <option>初めてです</option>
+            <option>少し経験があります</option>
+            <option>経験があります（ブランクあり）</option>
+            <option>現在も弾いています</option>
+          </select>
+        </label>
+
+        <label>ご希望の曜日・時間<span class="req">必須</span>
+          <input type="text" name="ご希望の曜日時間" required placeholder="例）水曜16時以降、日曜午前 など">
+        </label>
+
+        <label>メッセージ（ご質問などがあればどうぞ）
+          <textarea name="メッセージ" rows="5" placeholder="ご質問やご希望などをご自由にお書きください"></textarea>
+        </label>
+
+        <button class="btn btn-primary" type="submit">送信する</button>
+      </form>
+
+      <!-- ================= フォーム横の案内 ================= -->
+      <div class="contact-aside">
+        <h3>{contact.trialTitle}</h3>
+        <p>{contact.trialText}</p>
+
+        <h3>メールでのお申し込み</h3>
+        <p>フォームの代わりに、メールでもお申し込みいただけます。</p>
+        <p class="mail-box"><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <p style="margin-top:12px;">メールの場合は、以下をお知らせください。</p>
+        <ol>
+          <li>お名前（ふりがなもお願いします）</li>
+          <li>年齢</li>
+          <li>ピアノのご経験があるかどうか</li>
+          <li>ご希望の曜日、時間</li>
+        </ol>
+
+        <h3>教室の場所</h3>
+        <p>{contact.locationText}</p>
+      </div>
+
+    </div>
+  </div>
+</Base>
