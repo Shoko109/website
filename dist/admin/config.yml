@@ -18,7 +18,7 @@
 
 backend:
   name: github
-  repo: dub-G/tsurukawa-harunasaka-piano
+  repo: Shoko109/website
   branch: main
   commit_messages:
     update: '{{path}} を管理画面から更新'
