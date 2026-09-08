@@ -6,13 +6,14 @@ import contact from '../data/contact.json';
 // ★★★ お問い合わせフォームの受付フラグ / Contact form switch
 //
 //     いまは false（フォームは表示しますが、送信はできません）。
-//     以前は Netlify Forms が送信を受け取っていましたが、Cloudflare には
-//     同じしくみがないため、受付先が決まるまで止めてあります。
+//     以前は Netlify Forms が送信を受け取っていましたが、Cloudflare Pages
+//     には同じしくみがないため、受付先が決まるまで止めてあります。
 //     その間のお申し込みは、右側のメール案内でお願いします。
 //
-//     Was Netlify Forms; Cloudflare has no equivalent, so the form is shown
-//     but inert until a backend (Worker route → mail service) exists.
-//     To re-enable: set this to true, then make /api/contact real — see README.
+//     Was Netlify Forms; Cloudflare Pages has no equivalent, so the form is
+//     shown but inert until a backend (Pages Function → mail service) exists.
+//     To re-enable: set this to true, then give the <form> a real action
+//     (e.g. a /api/contact Pages Function) — see README.
 const FORM_ENABLED = false;
 ---
 <Base

@@ -1,10 +1,10 @@
 # ============================================================
-# Cloudflare のヘッダー設定 / HTTP headers for Cloudflare
+# Cloudflare Pages のヘッダー設定 / HTTP headers for Cloudflare Pages
 #
-# このファイルは dist/ にそのままコピーされ、Cloudflare（Workerの
-# 静的アセット）が読み取ります。以前の netlify.toml の代わりです。
-# Copied verbatim into dist/ and read by Cloudflare's static asset
-# server — it replaces the old netlify.toml [[headers]] blocks.
+# このファイルは dist/ にそのままコピーされ、Cloudflare Pages が
+# 読み取ります（以前の netlify.toml の [[headers]] の代わりです）。
+# This file is copied verbatim into dist/ and read by Cloudflare
+# Pages — it replaces the old netlify.toml [[headers]] blocks.
 # ============================================================
 
 # ★ テスト公開中のみ / TEST DEPLOY ONLY
