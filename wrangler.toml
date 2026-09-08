@@ -1,15 +1,24 @@
 # ============================================================
-# Cloudflare Pages 設定 / Cloudflare Pages configuration
+# Cloudflare Workers（静的アセット）の設定 / Cloudflare Workers static assets
 #
-# Pages（Git連携）のビルド設定はダッシュボードで決まりますが、
-# このファイルがあると `npx wrangler pages deploy` でも
-# 同じ出力フォルダが使われます。
+# ビルドで作られた dist/ を、そのまま配信する設定です。
+# Worker のスクリプトは無いので main はありません（アセットだけの Worker）。
 #
-# ダッシュボード側の設定 / Dashboard settings:
-#   Build command:        npm run build
-#   Build output directory: dist
-#   Node version:         .node-version（20）を自動で読みます
+# ★ name は、ダッシュボードで作った Worker の名前と
+#   まったく同じでなければいけません。ちがう名前にすると、
+#   別の Worker が新しく作られてしまいます。
+#   `name` MUST match the Worker created in the dashboard — otherwise
+#   `wrangler deploy` publishes to a different Worker.
+#
+# ダッシュボード側の設定 / Workers Builds settings:
+#   Build command:  npm run build
+#   Deploy command: npx wrangler deploy
+#   Node version:   .node-version（20）を自動で読みます
 # ============================================================
 name = "tsurukawa-harunasaka-piano"
 compatibility_date = "2026-09-08"
-pages_build_output_dir = "dist"
+
+[assets]
+directory = "./dist"
+# dist/_headers（noindex・キャッシュ設定）もここから読まれます。
+# _headers in dist/ is applied to these assets.
