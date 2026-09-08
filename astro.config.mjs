@@ -6,7 +6,7 @@ import { defineConfig } from 'astro/config';
 //
 // The canonical/OG/sitemap base URL. Set SITE_URL in the Cloudflare Pages
 // dashboard (Settings → Environment variables) to override the default.
-const site = process.env.SITE_URL || 'https://tsurukawa-harunasaka-piano.pages.dev';
+const site = process.env.SITE_URL || 'https://tsurukawa-piano.pages.dev';
 
 export default defineConfig({
   site,

@@ -38,7 +38,7 @@ The CMS is git-based: edits in `/admin` become commits to GitHub, which trigger 
    - Build command: `npm run build`
    - Build output directory: `dist`
    - Node version: read automatically from `.node-version` (20)
-   - Optional env var `SITE_URL` (Settings → Variables) — the canonical/OG/sitemap base URL. Defaults to `https://tsurukawa-harunasaka-piano.pages.dev`; set it once the real project name or custom domain exists, for **Production and Preview**.
+   - Optional env var `SITE_URL` (Settings → Variables) — the canonical/OG/sitemap base URL. Defaults to the live site, `https://tsurukawa-piano.pages.dev`; set it only when a custom domain arrives, for **Production and Preview**.
 2. **CMS login (access token)**: `/admin` shows **"Sign In Using Access Token"** because no OAuth app is configured. Create a token at GitHub → *Settings → Developer settings → Personal access tokens → Fine-grained tokens*:
    - Repository access: **only this repo**
    - Permissions → Repository permissions → **Contents: Read and write** (add **Pull requests: Read and write** only if you ever enable editorial workflow)
