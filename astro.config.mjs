@@ -1,7 +1,13 @@
 import { defineConfig } from 'astro/config';
 
-// ★ 独自ドメインを取得したら、この URL を書き換えてください
-//   （canonical・OGP・サイトマップの URL の元になります）
+// サイトのURL（canonical・OGP・サイトマップの元になります）。
+// Cloudflare Pages の環境変数 SITE_URL を設定すると、そちらが使われます。
+// 独自ドメインを取得したら SITE_URL を書き換えるだけでOKです。
+//
+// The canonical/OG/sitemap base URL. Set SITE_URL in the Cloudflare Pages
+// dashboard (Settings → Environment variables) to override the default.
+const site = process.env.SITE_URL || 'https://tsurukawa-harunasaka-piano.pages.dev';
+
 export default defineConfig({
-  site: 'https://tsurukawa-harunasaka-piano.netlify.app',
+  site,
 });

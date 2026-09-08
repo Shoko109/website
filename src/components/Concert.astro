@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import { resolveImage } from '../lib/images';
+
 interface ConcertItem {
   date: string;
   time?: string;
@@ -13,11 +16,21 @@ interface ConcertItem {
 }
 const { concert } = Astro.props as { concert: ConcertItem };
 const c = concert;
+
+// ちらし画像：CMSに入れた画像は最適化して出します。
+// 変換できないもの（外部URLなど）は、そのままの画像を出します。
+const flyer = resolveImage(c.image);
 ---
 <article class="concert">
   <div class="when">
     {c.image && (
-      <div class="flyer"><img src={c.image} alt={`${c.title}のちらし`} loading="lazy" width="320" height="440"></div>
+      <div class="flyer">
+        {flyer ? (
+          <Image src={flyer} alt={`${c.title}のちらし`} width={700} loading="lazy" decoding="async" />
+        ) : (
+          <img src={c.image} alt={`${c.title}のちらし`} loading="lazy" width="320" height="440">
+        )}
+      </div>
     )}
     <div class="when-text">
       <p class="date">{c.date}</p>

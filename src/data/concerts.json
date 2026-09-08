@@ -4,7 +4,7 @@
     {
       "date": "2026年10月4日(日)",
       "time": "14:00開演（13:30開場）",
-      "image": "/images/IMG_6750.jpeg",
+      "image": "/src/images/uploads/IMG_6750.jpeg",
       "title": "Concert d'automne オータムコンサート♪",
       "venue": "東京オペラシティ リサイタルホール",
       "area": "東京・初台駅より直結",
@@ -21,7 +21,7 @@
     {
       "date": "2026年2月7日(土)",
       "time": "13:40開場  14:00開演",
-      "image": "/images/IMG_4594.jpeg",
+      "image": "/src/images/uploads/IMG_4594.jpeg",
       "title": "ヴァイオリン・ピアノ デュオコンサート",
       "venue": "響堂ホール",
       "area": "経堂駅から徒歩6分",
@@ -40,7 +40,7 @@
     {
       "date": "2025年6月15日(日)",
       "time": "15:30,18:30の2回公演",
-      "image": "/images/IMG_2963.jpeg",
+      "image": "/src/images/uploads/IMG_2963.jpeg",
       "title": "音の万華鏡 ファゴット・クラリネット・ピアノ トリオコンサート",
       "venue": "Cafe MU's",
       "area": "神奈川・矢部駅から徒歩1分",

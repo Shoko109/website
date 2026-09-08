@@ -12,8 +12,8 @@
 #
 # ★ 将来、翔子さんのアカウントに移すとき:
 #   リポジトリを Transfer し、下の repo: を書き換えるだけ。
-#   （ボタン1つのログインにしたければ GitHub OAuth App +
-#     Netlify の OAuth provider 設定を追加 → README 参照）
+#   （ボタン1つのログインにしたければ GitHub OAuth App を
+#     用意する方法もあります → README 参照）
 # ============================================================
 
 backend:
@@ -25,8 +25,14 @@ backend:
     uploadMedia: '画像 {{path}} を追加'
     deleteMedia: '画像 {{path}} を削除'
 
-media_folder: public/images
-public_folder: /images
+# 画像のアップロード先 / Where uploaded images go.
+# src/images/uploads に入れると、ビルド時に自動で軽く（WebP化・リサイズ）
+# されてから配信されます。public/images に入れた画像は、そのままの大きさで
+# 配信されてしまう（スマホで重い）ので、こちらを既定にしています。
+# Uploads land in src/images/uploads so Astro can optimise them at build time;
+# anything in public/images is served at full size.
+media_folder: src/images/uploads
+public_folder: /src/images/uploads
 
 collections:
   - name: content
@@ -201,7 +207,7 @@ collections:
             # ※いまは仮のフリー素材（外部リンク）が入っています。「写真」欄から
             #   教室の写真をアップロードすると、そのまま差し替わります。
             fields:
-              - { label: 写真 / Photo, name: image, widget: image, hint: 横長の写真がきれいに表示されます。 / Landscape photos look best. }
+              - { label: 写真 / Photo, name: image, widget: image, choose_url: false, hint: 横長の写真がきれいに表示されます。 / Landscape photos look best. }
               - { label: 写真の見出し / Caption title, name: title, widget: string, hint: '例：レッスン室' }
               - { label: 写真の説明 / Caption text, name: text, widget: text, required: false }
           - { label: いちばん下の文章 / Closing text, name: outro, widget: text, required: false }
@@ -219,7 +225,7 @@ collections:
             fields:
               - { label: 日付 / Date, name: date, widget: string, hint: '例：2026年9月23日（火・祝）' }
               - { label: 開演時間など / Time etc., name: time, widget: string, required: false, hint: '例：開演 14:00（開場 13:30）' }
-              - { label: ちらし画像 / Flyer image, name: image, widget: image, required: false, hint: チラシの画像があれば入れてください（なくてもOK）。 / Optional flyer image. }
+              - { label: ちらし画像 / Flyer image, name: image, widget: image, required: false, choose_url: false, hint: チラシの画像があれば入れてください（なくてもOK）。 / Optional flyer image. }
               - { label: 演奏会名 / Title, name: title, widget: string }
               - { label: 会場 / Venue, name: venue, widget: string }
               - { label: 地域 / Area, name: area, widget: string, required: false, hint: '例：東京・町田市' }
@@ -241,7 +247,7 @@ collections:
             fields:
               - { label: 日付 / Date, name: date, widget: string }
               - { label: 開演時間など / Time etc., name: time, widget: string, required: false }
-              - { label: ちらし画像 / Flyer image, name: image, widget: image, required: false }
+              - { label: ちらし画像 / Flyer image, name: image, widget: image, required: false, choose_url: false }
               - { label: 演奏会名 / Title, name: title, widget: string }
               - { label: 会場 / Venue, name: venue, widget: string }
               - { label: 地域 / Area, name: area, widget: string, required: false }

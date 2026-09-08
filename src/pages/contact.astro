@@ -2,6 +2,19 @@
 import Base from '../layouts/Base.astro';
 import site from '../data/site.json';
 import contact from '../data/contact.json';
+
+// ★★★ お問い合わせフォームの受付フラグ / Contact form switch
+//
+//     いまは false（フォームは表示しますが、送信はできません）。
+//     以前は Netlify Forms が送信を受け取っていましたが、Cloudflare Pages
+//     には同じしくみがないため、受付先が決まるまで止めてあります。
+//     その間のお申し込みは、右側のメール案内でお願いします。
+//
+//     Was Netlify Forms; Cloudflare Pages has no equivalent, so the form is
+//     shown but inert until a backend (Pages Function → mail service) exists.
+//     To re-enable: set this to true, then give the <form> a real action
+//     (e.g. a /api/contact Pages Function) — see README.
+const FORM_ENABLED = false;
 ---
 <Base
   title="お問い合わせ・体験レッスン申込｜鶴川はるな坂ピアノ教室（町田市金井・鶴川駅）"
@@ -18,12 +31,23 @@ import contact from '../data/contact.json';
     <div class="contact-grid">
 
       <!-- ================= お問い合わせフォーム =================
-           このフォームは Netlify Forms を使っています。
-           送信内容は Netlify の管理画面（Forms）に届き、
-           メール通知の設定もできます（README参照）。 -->
-      <form class="contact-form" name="contact" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+           受付先（送信を受け取るしくみ）が決まるまで、フォームは
+           「見えるけれど送信できない」状態にしてあります。
+           上の FORM_ENABLED を true にすると、また使えるようになります。 -->
+      <form class="contact-form" name="contact" method="POST" action={FORM_ENABLED ? '/api/contact' : undefined}>
+        {!FORM_ENABLED && (
+          <div class="form-paused">
+            <p class="fp-title">ただいまフォームからの送信を停止しています</p>
+            <p>
+              申し訳ありません。お問い合わせフォームは準備中のため、いまは送信できません。<br>
+              お手数ですが、<strong>メール</strong>でお申し込みください（お名前・年齢・ピアノのご経験・ご希望の曜日と時間をお知らせください）。
+            </p>
+            <p class="fp-mail"><a class="btn btn-primary" href={`mailto:${site.email}`}>メールで申し込む</a></p>
+          </div>
+        )}
         <input type="hidden" name="form-name" value="contact">
         <p style="display:none;"><label>入力しないでください: <input name="bot-field"></label></p>
+        <fieldset disabled={!FORM_ENABLED}>
 
         <label>お名前（ふりがなもお願いします）<span class="req">必須</span>
           <input type="text" name="お名前" required placeholder="例）山田 花子（やまだ はなこ）">
@@ -55,6 +79,7 @@ import contact from '../data/contact.json';
         </label>
 
         <button class="btn btn-primary" type="submit">送信する</button>
+        </fieldset>
       </form>
 
       <!-- ================= フォーム横の案内 ================= -->
@@ -80,3 +105,36 @@ import contact from '../data/contact.json';
     </div>
   </div>
 </Base>
+
+<style>
+  /* fieldset は見た目に出さず、囲むだけ（送信停止のスイッチ用） */
+  .contact-form fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+
+  /* 送信を止めているあいだの入力欄は、うすいグレーで「いま使えない」と伝えます */
+  .contact-form fieldset:disabled { opacity: .55; }
+  .contact-form fieldset:disabled input,
+  .contact-form fieldset:disabled select,
+  .contact-form fieldset:disabled textarea,
+  .contact-form fieldset:disabled button { cursor: not-allowed; }
+
+  /* フォームの上に出す「いまは送信できません」のお知らせ */
+  .form-paused {
+    border: 1px solid var(--brass);
+    background: #fff;
+    padding: 20px 22px;
+    margin-bottom: 30px;
+  }
+  .form-paused .fp-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--green);
+    letter-spacing: .06em;
+    margin-bottom: 10px;
+  }
+  .form-paused p { font-size: .9rem; }
+  .form-paused .fp-mail { margin-top: 16px; }
+
+  @media (max-width: 720px) {
+    .form-paused { padding: 16px 16px; margin-bottom: 24px; }
+  }
+</style>

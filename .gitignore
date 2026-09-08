@@ -1,8 +1,8 @@
 # 依存パッケージ / Dependencies
 node_modules/
 
-# ビルド出力（Netlify が npm run build で生成します）
-# Build output — Netlify regenerates this from source on deploy
+# ビルド出力（Cloudflare Pages が npm run build で作り直します）
+# Build output — Cloudflare Pages regenerates this from source on deploy
 dist/
 .astro/
 
@@ -24,5 +24,5 @@ Thumbs.db
 .idea/
 *.swp
 
-# Netlify
-.netlify/
+# Cloudflare (wrangler)
+.wrangler/

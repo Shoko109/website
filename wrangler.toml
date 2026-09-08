@@ -1,0 +1,15 @@
+# ============================================================
+# Cloudflare Pages 設定 / Cloudflare Pages configuration
+#
+# Pages（Git連携）のビルド設定はダッシュボードで決まりますが、
+# このファイルがあると `npx wrangler pages deploy` でも
+# 同じ出力フォルダが使われます。
+#
+# ダッシュボード側の設定 / Dashboard settings:
+#   Build command:        npm run build
+#   Build output directory: dist
+#   Node version:         .node-version（20）を自動で読みます
+# ============================================================
+name = "tsurukawa-harunasaka-piano"
+compatibility_date = "2026-09-08"
+pages_build_output_dir = "dist"

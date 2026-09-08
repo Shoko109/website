@@ -1,8 +1,25 @@
 ---
 import Base from '../layouts/Base.astro';
+import { Image, getImage } from 'astro:assets';
+import { resolveImage } from '../lib/images';
 import lessons from '../data/lessons.json';
 
-const photos = lessons.photos.filter((p) => p.image);
+// ギャラリーに出す写真の横幅（下の <Image> と必ず同じ値にしてください。
+// 同じ値なら、画像ファイルは1枚だけ作られます）
+const PHOTO_WIDTH = 1200;
+
+// CMSに保存された画像パスを、最適化できる画像データに変換します。
+// 変換できなかったもの（外部URLなど）は、そのまま普通の画像として出します。
+// url は、検索エンジン・SNS向けに渡す「実際に配信されるファイル」のURLです。
+const photos = await Promise.all(
+  lessons.photos
+    .filter((p) => p.image)
+    .map(async (p) => {
+      const img = resolveImage(p.image);
+      const optimized = img ? await getImage({ src: img, width: PHOTO_WIDTH }) : null;
+      return { ...p, img, url: optimized ? optimized.src : p.image };
+    })
+);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -11,7 +28,7 @@ const jsonLd = {
   description: lessons.intro,
   image: photos.map((p) => ({
     '@type': 'ImageObject',
-    contentUrl: new URL(p.image, Astro.site).href,
+    contentUrl: new URL(p.url, Astro.site).href,
     name: p.title,
     description: p.text,
   })),
@@ -21,9 +38,13 @@ const jsonLd = {
   title="レッスンの様子｜鶴川はるな坂ピアノ教室（町田市金井・鶴川駅）"
   description="鶴川はるな坂ピアノ教室（町田市金井・小田急線鶴川駅）のレッスンの様子を写真でご紹介します。グランドピアノのレッスン室、お子さまのレッスン、ソルフェージュ、連弾、発表会のようす。"
   path="/lessons/"
-  ogImage={photos.length > 0 ? photos[0].image : undefined}
+  ogImage={photos.length > 0 ? photos[0].url : undefined}
 >
-  <link rel="preconnect" href="https://images.unsplash.com" crossorigin slot="head" />
+  {/* まだ仮のフリー素材（Unsplash）の写真が残っているあいだの読み込み高速化。
+      すべて教室の写真に差し替えたら、この1行は消してかまいません。 */}
+  {photos.some((p) => !p.img) && (
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin slot="head" />
+  )}
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
 
   <div class="page-hero">
@@ -40,13 +61,23 @@ const jsonLd = {
       {photos.map((p, i) => (
         <figure class={`shot reveal${i === 0 ? ' wide' : ''}`}>
           <div class="frame">
-            <img
-              src={p.image}
-              alt={`${p.title}｜鶴川はるな坂ピアノ教室のレッスンの様子`}
-              loading={i === 0 ? 'eager' : 'lazy'}
-              width="640"
-              height="420"
-            >
+            {p.img ? (
+              <Image
+                src={p.img}
+                alt={`${p.title}｜鶴川はるな坂ピアノ教室のレッスンの様子`}
+                width={PHOTO_WIDTH}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            ) : (
+              <img
+                src={p.image}
+                alt={`${p.title}｜鶴川はるな坂ピアノ教室のレッスンの様子`}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                width="640"
+                height="420"
+              >
+            )}
           </div>
           <figcaption>
             <p class="cap-title">{p.title}</p>

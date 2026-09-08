@@ -1,4 +1,50 @@
-# ★ TEST DEPLOY ONLY — blocks all indexing on every file.
-#   DELETE this file before the real launch (see README).
+# ============================================================
+# Cloudflare Pages のヘッダー設定 / HTTP headers for Cloudflare Pages
+#
+# このファイルは dist/ にそのままコピーされ、Cloudflare Pages が
+# 読み取ります（以前の netlify.toml の [[headers]] の代わりです）。
+# This file is copied verbatim into dist/ and read by Cloudflare
+# Pages — it replaces the old netlify.toml [[headers]] blocks.
+# ============================================================
+
+# ★ テスト公開中のみ / TEST DEPLOY ONLY
+#   すべてのファイルで検索エンジン・AIボットの登録を止めます。
+#   本公開のときは X-Robots-Tag の行を消してください（README参照）。
+#   Blocks all indexing on every file — delete the X-Robots-Tag
+#   line below at launch (see README).
 /*
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# 管理画面（/admin）は本公開のあとも、ずっと登録させません。
+# The /admin CMS stays unindexed even after launch.
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+
+# Astro が作る画像・CSS・JS はファイル名にハッシュが付くので、
+# 中身が変わればファイル名も変わります＝1年キャッシュして安全です。
+# Astro's build assets are content-hashed, so they can be cached forever.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# public/ に置いた画像やアイコンは1週間キャッシュします。
+# Static files served straight from public/ — cached for a week.
+/images/*
+  Cache-Control: public, max-age=604800
+/favicon.svg
+  Cache-Control: public, max-age=604800
+/favicon-32.png
+  Cache-Control: public, max-age=604800
+/apple-touch-icon.png
+  Cache-Control: public, max-age=604800
+
+# style.css と script.js はハッシュが付かないので、1日だけキャッシュします
+# （直してもすぐ反映されるように）。
+# Unhashed site assets — short cache so edits show up quickly.
+/style.css
+  Cache-Control: public, max-age=86400
+/script.js
+  Cache-Control: public, max-age=86400

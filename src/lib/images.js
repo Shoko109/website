@@ -10,8 +10,12 @@ const uploads = import.meta.glob('/src/images/uploads/*', {
 });
 
 // CMSで欄が空のまま保存された・外部URLが貼られた・アップロード後にファイルが
-// 見つからない、などの場合でも、ビルドを失敗させずに fallback の画像を
-// 表示します（fallback は呼び出し側で必ず渡してください）。
-export function resolveImage(path, fallback) {
-  return (path && uploads[path]) || fallback;
+// 見つからない、などの場合でも、ビルドを失敗させずに fallback を返します
+// （fallback を渡さない場合は null＝呼び出し側で普通の <img> を出せます）。
+export function resolveImage(path, fallback = null) {
+  if (!path) return fallback;
+  // 保存され方によっては先頭の「/」が付かないことがあるので、そろえてから探します
+  // （例："src/images/uploads/IMG_3624.jpeg" → "/src/images/uploads/IMG_3624.jpeg"）
+  const key = path.startsWith('/') ? path : `/${path}`;
+  return uploads[key] || fallback;
 }
