@@ -15,7 +15,7 @@ const uploads = import.meta.glob('/src/images/uploads/*', {
 export function resolveImage(path, fallback = null) {
   if (!path) return fallback;
   // 保存され方によっては先頭の「/」が付かないことがあるので、そろえてから探します
-  // （例："src/images/uploads/IMG_3624.jpeg" → "/src/images/uploads/IMG_3624.jpeg"）
+  // （例："src/images/uploads/IMG_3195.jpeg" → "/src/images/uploads/IMG_3195.jpeg"）
   const key = path.startsWith('/') ? path : `/${path}`;
   return uploads[key] || fallback;
 }
