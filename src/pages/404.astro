@@ -1,0 +1,43 @@
+---
+// ページが見つからなかったときに出る画面です。
+// Cloudflare Pages が、存在しないURLに対して自動でこのページを返します
+// （dist/404.html として書き出されます）。設定はいりません。
+//
+// ナビゲーションはあえて残しています。行き止まりにせず、
+// 探しているページへ進んでいただくためです。
+import Base from '../layouts/Base.astro';
+
+const links = [
+  { href: '/', label: 'ホーム', note: '教室のご案内・レッスン内容・料金' },
+  { href: '/lessons/', label: 'レッスンの様子', note: '写真でご紹介しています' },
+  { href: '/profile/', label: '講師プロフィール', note: '前田河翔子のご紹介' },
+  { href: '/concerts/', label: '演奏会', note: '出演する演奏会のご案内' },
+  { href: '/contact/', label: 'お問い合わせ・体験レッスン申込', note: '体験レッスン受付中です' },
+];
+---
+<Base
+  title="ページが見つかりません｜鶴川はるな坂ピアノ教室"
+  description="お探しのページは見つかりませんでした。鶴川はるな坂ピアノ教室（町田市金井・小田急線鶴川駅）のホームから、レッスン内容や料金をご覧いただけます。"
+  path="/404/"
+  noindex={true}
+>
+  <div class="notfound">
+    <p class="nf-code" aria-hidden="true">404</p>
+    <h1>ページが見つかりませんでした</h1>
+    <p class="nf-lead">
+      お探しのページは、移動したか、なくなってしまったようです。<br>
+      下のご案内から、お探しのものが見つかるかもしれません。
+    </p>
+
+    <ul class="nf-links">
+      {links.map((l) => (
+        <li>
+          <a href={l.href}>{l.label}</a>
+          <span>{l.note}</span>
+        </li>
+      ))}
+    </ul>
+
+    <a class="btn btn-primary" href="/">ホームにもどる</a>
+  </div>
+</Base>

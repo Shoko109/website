@@ -12,6 +12,8 @@ const ogImage = await getImage({ src: profileImage, width: 1200 });
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
+  // トップページの founder から、この同じIDを指しています（同一人物だと伝えるため）
+  '@id': new URL('/profile/#teacher', Astro.site).href,
   name: '前田河翔子',
   alternateName: 'Shoko Maedako',
   jobTitle: 'ピアノ講師・ピアニスト',
@@ -27,7 +29,17 @@ const jsonLd = {
       addressCountry: 'JP',
     },
   },
-  alumniOf: ['東京都立芸術高校 作曲科', '東京音楽大学 ピアノ科', 'ドイツ国立ミュンスター音楽大学大学院 ピアノ科'],
+  alumniOf: [
+    { '@type': 'EducationalOrganization', name: '東京都立芸術高校 作曲科' },
+    { '@type': 'CollegeOrUniversity', name: '東京音楽大学 ピアノ科' },
+    {
+      '@type': 'CollegeOrUniversity',
+      name: 'ドイツ国立ミュンスター音楽大学大学院 ピアノ科',
+      address: { '@type': 'PostalAddress', addressLocality: 'Münster', addressCountry: 'DE' },
+    },
+  ],
+  knowsAbout: ['ピアノ', 'ソルフェージュ', '室内楽', '伴奏', '絶対音感育成'],
+  nationality: { '@type': 'Country', name: '日本' },
   sameAs: [site.blogUrl],
 };
 ---

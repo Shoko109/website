@@ -84,9 +84,20 @@ The `SITE_URL` env var in the Cloudflare Pages dashboard still overrides the def
 
 ## SEO — in place / to do
 
-In the code: location-keyworded titles/descriptions, JSON-LD (`MusicSchool` on home, `Person` on profile), OG tags, canonicals, sitemap, semantic headings, Japanese alt text, embedded map.
+In the code: location-keyworded titles and descriptions, an `<h1>` on the home page whose third line carries the primary keyword (editable in the CMS as the hero's small third line), OG and Twitter card tags, canonicals, a sitemap, semantic headings, Japanese alt text on every image, an embedded map, a branded 404, and JSON-LD throughout:
+
+| Page | Structured data |
+|---|---|
+| home | `MusicSchool` with address, lesson days, and every price pulled live from `home.json` |
+| profile | `Person` with `alumniOf` covering the Tokyo and Münster degrees |
+| concerts | `MusicEvent` per upcoming concert, with `startDate` parsed from the Japanese date text |
+| all sub-pages | `BreadcrumbList`, emitted automatically by `Base.astro` from its `CRUMB` map |
+
+Prices and dates are parsed from the CMS data at build time rather than duplicated, so a CMS edit updates the structured data with it. Anything unparseable is omitted rather than guessed — a wrong `startDate` is worse than none.
 
 Still to do, all free and all off-site: **Google Business Profile** (biggest local-search win by far for a neighbourhood piano school), **Google Search Console** (verify the domain, submit `https://shokomaedako.com/sitemap.xml`), **Bing Webmaster Tools**, and a link back from the school's note.com profile.
+
+**The old Ameba site is the biggest remaining problem.** `tsurukawapiano.amebaownd.com` is still live and still describes itself as 町田市金井、鶴川でピアノを習うなら…鶴川はるな坂ピアノ教室, which is the exact target of this site. Two pages competing for one query split the signal, and the older site may well win. Replace its content with a short moved notice linking here, or take it down. It is listed in `sameAs` on the home page; drop it from there if it goes away.
 
 One Cloudflare setting to check: since 2025 Cloudflare blocks AI crawlers by default on some new zones. If AI assistants should be able to read the site, confirm **Security → Bots → AI Scrapers and Crawlers** is set to *off* (allow) for this domain — `robots.txt` says yes, but a Cloudflare block overrules it at the edge.
 

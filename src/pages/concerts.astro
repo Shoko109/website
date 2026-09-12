@@ -3,6 +3,23 @@ import Base from '../layouts/Base.astro';
 import Concert from '../components/Concert.astro';
 import concerts from '../data/concerts.json';
 
+// 「2026年10月4日(日)」と「14:00開演（13:30開場）」を、検索エンジンが読める
+// 日時（2026-10-04T14:00）に変えます。演奏会が検索結果にカード表示される
+// ためには、この開始日時が必要です。読み取れない書き方のときは、
+// まちがった日付を出すより、何も出さないほうが安全なので省きます。
+//
+// Google needs a machine-readable startDate before it will show an event
+// card. Anything it can't parse is omitted rather than guessed at.
+function startDate(dateText = '', timeText = '') {
+  const d = String(dateText).match(/(\d{4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
+  if (!d) return undefined;
+  const [, y, mo, day] = d;
+  const pad = (n) => String(n).padStart(2, '0');
+  const t = String(timeText).match(/(\d{1,2})\s*[:：]\s*(\d{2})/);
+  const date = `${y}-${pad(mo)}-${pad(day)}`;
+  return t ? `${date}T${pad(t[1])}:${t[2]}` : date;
+}
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -13,18 +30,24 @@ const jsonLd = {
     item: {
       '@type': 'MusicEvent',
       name: c.title,
+      startDate: startDate(c.date, c.time),
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
       performer: [
-        { '@type': 'Person', name: '前田河翔子' },
+        { '@type': 'Person', '@id': new URL('/profile/#teacher', Astro.site).href, name: '前田河翔子' },
         ...(c.collaborators || []).map((n) => ({ '@type': 'Person', name: n })),
       ],
       location: { '@type': 'Place', name: c.venue, address: c.area },
+      ...(Array.isArray(c.program) && c.program.length
+        ? { workPerformed: c.program.map((w) => ({ '@type': 'MusicComposition', name: w })) }
+        : {}),
     },
   })),
 };
 ---
 <Base
   title="演奏会情報｜鶴川はるな坂ピアノ教室（町田市金井・鶴川駅）"
-  description="鶴川はるな坂ピアノ教室 講師・前田河翔子（ピアニスト）の演奏会情報。ソロリサイタルや室内楽、歌曲の伴奏など、出演する演奏会のご案内です。"
+  description="鶴川はるな坂ピアノ教室（町田市金井・小田急線鶴川駅）講師・前田河翔子（ピアニスト）の演奏会情報。ソロリサイタル、室内楽、歌曲の伴奏など、出演する演奏会のご案内です。東京音楽大学・ドイツ国立ミュンスター音楽大学大学院卒業。"
   path="/concerts/"
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />

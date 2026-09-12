@@ -1,11 +1,42 @@
 ---
 import Base from '../layouts/Base.astro';
 import site from '../data/site.json';
+import home from '../data/home.json';
 import HomeSections from '../components/HomeSections.astro';
+
+// 料金表（home.json）から、検索エンジン向けの「料金データ」を組み立てます。
+// 管理画面で料金を直すと、ここも自動でついてきます。
+// Prices are derived from home.json, so a CMS edit updates the structured
+// data too — nothing to keep in sync by hand.
+const yen = (s: string) => Number(String(s).replace(/[^0-9]/g, '')) || undefined;
+const offer = (name: string, price: string, unit: string) => ({
+  '@type': 'Offer',
+  name,
+  price: yen(price),
+  priceCurrency: 'JPY',
+  description: unit,
+});
+
+const lessonOffers = [
+  offer(`${home.pricing.trial.label}（${home.pricing.trial.duration}）`, home.pricing.trial.price, '1回'),
+  ...home.pricing.monthly.rows.map((r: any) => offer(`${home.pricing.monthly.title}・${r.item}`, r.price, '1か月')),
+  ...home.pricing.single.rows.map((r: any) => offer(`${home.pricing.single.title}・${r.item}`, r.price, '1回')),
+];
+
+// 「水・木・金・日」を、検索エンジンが読める曜日に変えます。
+const DAY: Record<string, string> = {
+  月: 'Monday', 火: 'Tuesday', 水: 'Wednesday', 木: 'Thursday',
+  金: 'Friday', 土: 'Saturday', 日: 'Sunday',
+};
+const lessonDays = String(home.pricing.days)
+  .split(/[・、,\s]+/)
+  .map((d) => DAY[d.trim()])
+  .filter(Boolean);
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'MusicSchool',
+  '@id': new URL('/#school', Astro.site).href,
   name: site.name,
   description: '町田市金井・小田急線鶴川駅のピアノ教室。お子さまから大人の方まで、のびのびと音楽を楽しめる個人レッスンを行っています。',
   url: Astro.site?.href,
@@ -24,9 +55,20 @@ const jsonLd = {
   inLanguage: 'ja',
   founder: {
     '@type': 'Person',
+    '@id': new URL('/profile/#teacher', Astro.site).href,
     name: '前田河翔子',
     jobTitle: 'ピアノ講師・ピアニスト',
+    alumniOf: [
+      { '@type': 'CollegeOrUniversity', name: '東京音楽大学' },
+      { '@type': 'CollegeOrUniversity', name: 'ドイツ国立ミュンスター音楽大学大学院', address: { '@type': 'PostalAddress', addressCountry: 'DE' } },
+    ],
   },
+  openingHoursSpecification: lessonDays.map((d) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: `https://schema.org/${d}`,
+  })),
+  makesOffer: lessonOffers,
+  currenciesAccepted: 'JPY',
   sameAs: [site.blogUrl, 'https://tsurukawapiano.amebaownd.com'],
 };
 ---

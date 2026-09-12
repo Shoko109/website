@@ -309,6 +309,12 @@ a { color: var(--green); }
   white-space: nowrap;
 }
 .hero h1 em { font-style: normal; color: var(--green); }
+/* 見出しの3行目（場所）。ほかの2行よりずっと小さく、そえるように置きます。
+   縦書きでは <br> ごとに左へ列が増えるので、細い1列として並びます。 */
+.hero h1 .h1-sub {
+  font-size: .42em; letter-spacing: .2em; color: var(--ink-soft);
+  font-weight: 400; font-family: var(--font-body);
+}
 /* 見出しの後ろの淡い丸が本文の上にかぶらないよう、本文を前面に置きます */
 .hero-text { position: relative; z-index: 1; max-width: 380px; padding-top: 8px; }
 .hero-text .lead { font-size: .95rem; }
@@ -343,6 +349,7 @@ a { color: var(--green); }
 @media (max-width: 900px) {
   .hero-inner { grid-template-columns: minmax(0, 1fr); padding: 44px 22px 52px; gap: 36px; }
   .hero h1 { writing-mode: horizontal-tb; min-height: 0; letter-spacing: .14em; white-space: normal; }
+  .hero h1 .h1-sub { display: inline-block; margin-top: 12px; font-size: .5em; letter-spacing: .1em; }
   .hero h1::before { width: 150px; height: 150px; top: -46px; right: 4px; }
   .hero-deco { display: none; }
   .hero-left { flex-direction: column; gap: 20px; }
@@ -629,6 +636,39 @@ section.block.alt {
 .thanks h1 { letter-spacing: .2em; }
 .thanks p { margin-top: 18px; font-size: .95rem; }
 .thanks .btn { margin-top: 32px; }
+
+/* 404ページ（お探しのページが見つからなかったとき） */
+.notfound { text-align: center; padding: 88px 22px 100px; max-width: 640px; margin: 0 auto; }
+.notfound .nf-code {
+  font-family: var(--font-latin);
+  font-size: 4rem; line-height: 1;
+  color: var(--brass); letter-spacing: .12em; margin: 0 0 18px;
+}
+.notfound h1 { letter-spacing: .16em; font-size: 1.3rem; }
+.notfound .nf-lead { margin-top: 18px; font-size: .95rem; color: var(--ink-soft); line-height: 2; }
+.notfound .nf-links {
+  list-style: none; padding: 0;
+  margin: 40px auto 0; text-align: left;
+  border-top: 1px solid var(--line);
+}
+.notfound .nf-links li { border-bottom: 1px solid var(--line); }
+.notfound .nf-links a {
+  display: block; padding: 15px 4px 5px;
+  font-family: var(--font-display); font-size: 1rem;
+  color: var(--green-deep); text-decoration: none;
+}
+.notfound .nf-links a:hover { color: var(--green); }
+.notfound .nf-links span {
+  display: block; padding: 0 4px 15px;
+  font-size: .8rem; color: var(--ink-soft);
+}
+.notfound .btn { margin-top: 38px; }
+
+@media (max-width: 700px) {
+  .notfound { padding: 62px 20px 76px; }
+  .notfound .nf-code { font-size: 3rem; }
+  .notfound h1 { font-size: 1.12rem; }
+}
 
 /* ==========================================================
    アニメーション

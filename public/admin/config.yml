@@ -99,6 +99,7 @@ collections:
             fields:
               - { label: 大見出し（1行目） / Big heading (line 1), name: titleLine1, widget: string }
               - { label: '大見出し（2行目・強調） / Big heading (line 2, italic)', name: titleLine2, widget: string }
+              - { label: '大見出しの小さな3行目（場所。検索で見つけてもらうための大事な一行です） / Small third line (location — matters for search)', name: titleSub, widget: string, required: false }
               - { label: 紹介文 / Lead text, name: lead, widget: text }
               - { label: 場所の表記 / Location line, name: place, widget: string }
               - label: 写真（右側の街並みの写真） / Photo (town photo on the right)
