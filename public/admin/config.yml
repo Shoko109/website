@@ -169,7 +169,7 @@ collections:
             collapsed: true
             fields:
               - { label: 見出し / Heading, name: title, widget: string }
-              - { label: 文章 / Text, name: text, widget: string }
+              - { label: 文章 / Text, name: text, widget: string, required: false }
 
       # ---------------- プロフィールページ / Profile page ----------------
       - name: profile

@@ -195,6 +195,6 @@ const profileImage = resolveImage(profile.image, fallbackProfileImage);
 <div class="keys-divider" aria-hidden="true"></div>
 <div class="cta-band">
   <h2>{home.ctaBand.title}</h2>
-  <p>{home.ctaBand.text}</p>
+  {home.ctaBand.text && <p>{home.ctaBand.text}</p>}
   <a class="btn" href="/contact/">お問い合わせ・体験レッスン申込</a>
 </div>
