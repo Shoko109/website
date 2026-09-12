@@ -32,8 +32,9 @@ const profileImage = resolveImage(profile.image, fallbackProfileImage);
           <a class="btn btn-ghost" href="#price">料金を見る</a>
         </div>
       </div>
-      {/* 見出しの3行目は、検索で「町田市金井のピアノ教室」を探している方に
-          見つけてもらうための一行です。h1 の中に入れておくのが効きます。 */}
+      {/* 見出しの3行目（場所）は、いまは空にしてあるので出ません。
+          管理画面の「大見出しの小さな3行目」に文字を入れると出ます。
+          検索には少し効きますが、見た目を優先して今は出していません。 */}
       <h1>{home.hero.titleLine1}<br><em>{home.hero.titleLine2}</em>{home.hero.titleSub && (<><br><span class="h1-sub">{home.hero.titleSub}</span></>)}</h1>
     </div>
     <div class="hero-photo">
