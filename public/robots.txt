@@ -1,47 +1,68 @@
 # ============================================================
-# ★テスト公開中：すべての検索エンジン・AIボットを拒否しています
-# 本公開のときは、このファイルを README の手順どおり元に戻すこと
+# 検索エンジン・AIボットへの案内 / robots.txt
+#
+# 2026年9月に本公開しました。いまはすべてのロボットを歓迎しています
+# （Google・Bing などの検索エンジンと、ChatGPT・Claude などのAIも）。
+#
+# Public since September 2026. All crawlers welcome, search engines
+# and AI assistants alike.
+#
+# 「登録してほしくないページ」は、ページ自体に noindex を入れてあります
+# （/thanks/ と /business-card/）。ここで Disallow にすると、ロボットが
+# その noindex を読めなくなってしまうので、あえて書いていません。
 # ============================================================
 
 User-agent: *
-Disallow: /
+Allow: /
 
-# AI crawlers (belt and braces — the * rule above already covers them)
+# 管理画面はロボットに見せません（誰からもリンクしていません）。
+# The CMS is not for crawlers — nothing links to it anyway.
+Disallow: /admin/
+
+# ------------------------------------------------------------
+# AIのロボットにも、はっきり「どうぞ」と伝えます。
+# 教室のことを聞かれたAIが答えられるようになります。
+# Explicit opt-in for AI crawlers, so assistants can answer
+# questions about the school.
+# ------------------------------------------------------------
+
 User-agent: GPTBot
-Disallow: /
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
 
 User-agent: ChatGPT-User
-Disallow: /
+Allow: /
 
 User-agent: ClaudeBot
-Disallow: /
+Allow: /
 
-User-agent: Claude-Web
-Disallow: /
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
 
 User-agent: anthropic-ai
-Disallow: /
-
-User-agent: CCBot
-Disallow: /
+Allow: /
 
 User-agent: Google-Extended
-Disallow: /
+Allow: /
 
 User-agent: PerplexityBot
-Disallow: /
-
-User-agent: Bytespider
-Disallow: /
-
-User-agent: Amazonbot
-Disallow: /
-
-User-agent: meta-externalagent
-Disallow: /
-
-User-agent: FacebookBot
-Disallow: /
+Allow: /
 
 User-agent: Applebot-Extended
-Disallow: /
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://shokomaedako.com/sitemap.xml

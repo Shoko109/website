@@ -60,41 +60,35 @@ Optional later upgrade for one-button login ("Sign in with GitHub", no token to 
 
 Local CMS testing without deploying: open `npm run dev` site at `http://localhost:4321/admin/`, and use Sveltia's "Work with Local Repository" button (Chrome/Edge only) — it edits the files on disk directly.
 
-## ⚠️ Site is currently in STEALTH MODE (test deploy)
+## Live since September 2026 (stealth mode is OFF)
 
-Indexing is blocked at three layers:
+The site is public at **https://shokomaedako.com** and open to all crawlers, search engines and AI assistants alike.
 
-1. `STEALTH = true` in `src/layouts/Base.astro` → `<meta name="robots" content="noindex…">` on every page
-2. `X-Robots-Tag` header on every file, set in `public/_headers` (marked TEST DEPLOY ONLY — Cloudflare Pages reads this file from `dist/`)
-3. `public/robots.txt` — `Disallow: /` for all user agents
+Indexing is controlled in three places. All three must agree — changing one alone does nothing:
 
-Note that Cloudflare Pages also serves every branch/preview build at `<hash>.tsurukawa-harunasaka-piano.pages.dev`; those get the same `_headers`, so they are noindexed too. If you want the test site *unreachable* rather than merely unindexed, add **Cloudflare Access** (Pages project → Settings → General → *Access policy*) — a one-time email code before the site loads. `/admin` stays reachable behind it once you sign in.
+1. `STEALTH` in `src/layouts/Base.astro` — now `false`. When `true`, every page gets `<meta name="robots" content="noindex…">`.
+2. `public/_headers` — the `X-Robots-Tag` line in the `/*` block is gone. The `/admin/*` block still carries its own, so the CMS stays unindexed forever.
+3. `public/robots.txt` — `Allow: /` for everyone, with explicit `Allow` lines for the named AI crawlers so the opt-in is unambiguous, plus the `Sitemap:` pointer.
 
-### Before the REAL launch, undo all of it:
+`/thanks/` and `/business-card/` stay out of search through their own `noindex={true}` prop, and they are deliberately **not** listed in `robots.txt` — a `Disallow` would stop crawlers fetching the page and so stop them ever reading the `noindex`.
 
-- [ ] Set `STEALTH = false` in `src/layouts/Base.astro` (thanks page and /admin stay noindexed automatically)
-- [ ] Delete the `X-Robots-Tag` line from the `/*` block in `public/_headers` (keep the rest of the file — the `/admin/*` rule, the security headers and the cache rules all stay)
-- [ ] Replace `public/robots.txt` contents with:
-  ```
-  User-agent: *
-  Allow: /
-  Disallow: /thanks/
-  Disallow: /admin/
+### To hide the site again
 
-  Sitemap: https://YOUR-DOMAIN/sitemap.xml
-  ```
+Reverse all three: `STEALTH = true`, put `X-Robots-Tag: noindex, nofollow` back in the `/*` block, and swap `robots.txt` for `User-agent: *` / `Disallow: /`. To make it *unreachable* rather than merely unindexed, add **Cloudflare Access** (Pages project → Settings → General → *Access policy*).
 
-## When you buy the custom domain
+## The custom domain
 
-1. Cloudflare Pages → *Custom domains* → add the domain (HTTPS automatic).
-2. Set the `SITE_URL` env var to the new URL and redeploy (canonical/OG/sitemap URLs derive from it — no code change needed).
-3. Search-replace the old URL in `public/sitemap.xml` and `public/robots.txt`.
+The site runs on **shokomaedako.com** (apex, no `www`). That URL is the default `site` value in `astro.config.mjs`, so canonical tags, OG tags and the sitemap all derive from it with no env var needed.
+
+The `SITE_URL` env var in the Cloudflare Pages dashboard still overrides the default if it is set. Leave it unset unless the domain changes again — a stale `SITE_URL` silently poisons every canonical tag on the site, which is exactly what happened before launch.
 
 ## SEO — in place / to do
 
 In the code: location-keyworded titles/descriptions, JSON-LD (`MusicSchool` on home, `Person` on profile), OG tags, canonicals, sitemap, semantic headings, Japanese alt text, embedded map.
 
-After launch (both free): **Google Business Profile** (biggest local-search win), **Google Search Console** (submit sitemap), and a link from the school's note.com profile.
+Still to do, all free and all off-site: **Google Business Profile** (biggest local-search win by far for a neighbourhood piano school), **Google Search Console** (verify the domain, submit `https://shokomaedako.com/sitemap.xml`), **Bing Webmaster Tools**, and a link back from the school's note.com profile.
+
+One Cloudflare setting to check: since 2025 Cloudflare blocks AI crawlers by default on some new zones. If AI assistants should be able to read the site, confirm **Security → Bots → AI Scrapers and Crawlers** is set to *off* (allow) for this domain — `robots.txt` says yes, but a Cloudflare block overrules it at the edge.
 
 ## Images
 

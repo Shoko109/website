@@ -7,13 +7,11 @@
 # Pages — it replaces the old netlify.toml [[headers]] blocks.
 # ============================================================
 
-# ★ テスト公開中のみ / TEST DEPLOY ONLY
-#   すべてのファイルで検索エンジン・AIボットの登録を止めます。
-#   本公開のときは X-Robots-Tag の行を消してください（README参照）。
-#   Blocks all indexing on every file — delete the X-Robots-Tag
-#   line below at launch (see README).
+# 全ファイル共通の安全設定です。
+#   （2026年9月の本公開で、検索よけの X-Robots-Tag 行は外しました）
+#   Site-wide security headers. The launch-blocking X-Robots-Tag was
+#   removed at launch in September 2026.
 /*
-  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN

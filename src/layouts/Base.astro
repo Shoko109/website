@@ -2,10 +2,11 @@
 import site from '../data/site.json';
 import RoseMark from '../components/RoseMark.astro';
 
-// ★★★ テスト公開中フラグ：本公開のときは false にしてください！
-//     （全ページに noindex メタタグが入ります。
-//       public/_headers・public/robots.txt も忘れずに直すこと → README参照）
-const STEALTH = true;
+// テスト公開中フラグ。true にすると全ページに noindex メタタグが入り、
+// 検索エンジンから隠れます。2026年9月に本公開したので false です。
+// （もう一度隠したいときは true に戻したうえで、public/_headers と
+//   public/robots.txt も一緒に戻してください → README参照）
+const STEALTH = false;
 
 interface Props {
   title: string;
@@ -76,6 +77,13 @@ const groupIsCurrent = (item: any) =>
   <meta property="og:url" content={canonical}>
   <meta property="og:image" content={ogImageAbs}>
   <meta property="og:locale" content="ja_JP">
+  <meta property="og:site_name" content={site.name}>
+
+  {/* LINE や X（旧Twitter）でURLを送ったとき、大きな写真つきで表示されます */}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={ogImageAbs}>
 
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
