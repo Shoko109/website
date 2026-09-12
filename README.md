@@ -68,7 +68,7 @@ Indexing is controlled in three places. All three must agree — changing one al
 
 1. `STEALTH` in `src/layouts/Base.astro` — now `false`. When `true`, every page gets `<meta name="robots" content="noindex…">`.
 2. `public/_headers` — the `X-Robots-Tag` line in the `/*` block is gone. The `/admin/*` block still carries its own, so the CMS stays unindexed forever.
-3. `public/robots.txt` — `Allow: /` for everyone, with explicit `Allow` lines for the named AI crawlers so the opt-in is unambiguous, plus the `Sitemap:` pointer.
+3. `public/robots.txt` — a single `User-agent: *` group allowing everything except `/admin/`, plus the `Sitemap:` pointer. AI crawlers are covered by that one group; **do not add per-bot blocks**. A crawler obeys only the most specific group matching its own name and inherits nothing from `*`, so naming GPTBot or ClaudeBot would quietly grant them the `/admin/` access the wildcard group denies.
 
 `/thanks/` and `/business-card/` stay out of search through their own `noindex={true}` prop, and they are deliberately **not** listed in `robots.txt` — a `Disallow` would stop crawlers fetching the page and so stop them ever reading the `noindex`.
 

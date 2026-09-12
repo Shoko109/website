@@ -1,68 +1,28 @@
 # ============================================================
 # 検索エンジン・AIボットへの案内 / robots.txt
 #
-# 2026年9月に本公開しました。いまはすべてのロボットを歓迎しています
-# （Google・Bing などの検索エンジンと、ChatGPT・Claude などのAIも）。
-#
+# 2026年9月に本公開しました。すべてのロボットを歓迎しています
+# （Google・Bing などの検索エンジンも、ChatGPT・Claude などのAIも）。
 # Public since September 2026. All crawlers welcome, search engines
 # and AI assistants alike.
 #
-# 「登録してほしくないページ」は、ページ自体に noindex を入れてあります
-# （/thanks/ と /business-card/）。ここで Disallow にすると、ロボットが
-# その noindex を読めなくなってしまうので、あえて書いていません。
+# ロボットの名前を1つずつ書く必要はありません。下の「*」がすべてに
+# 当てはまります。むしろ名前を書くと、そのロボットは自分の名前の
+# ところだけを読んで「*」を無視するので、/admin/ を見に行くように
+# なってしまいます。だから、あえて短くしてあります。
+#
+# Deliberately minimal. A crawler obeys exactly one group — the most
+# specific match for its own name — and inherits nothing from the
+# others, so naming individual bots here would silently drop the
+# /admin/ rule for exactly those bots.
+#
+# 「登録してほしくないページ」（/thanks/ と /business-card/）は、
+# ページ自体に noindex を入れてあります。ここで Disallow にすると、
+# ロボットがその noindex を読めなくなるので、書いていません。
 # ============================================================
 
 User-agent: *
 Allow: /
-
-# 管理画面はロボットに見せません（誰からもリンクしていません）。
-# The CMS is not for crawlers — nothing links to it anyway.
 Disallow: /admin/
-
-# ------------------------------------------------------------
-# AIのロボットにも、はっきり「どうぞ」と伝えます。
-# 教室のことを聞かれたAIが答えられるようになります。
-# Explicit opt-in for AI crawlers, so assistants can answer
-# questions about the school.
-# ------------------------------------------------------------
-
-User-agent: GPTBot
-Allow: /
-
-User-agent: OAI-SearchBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Claude-User
-Allow: /
-
-User-agent: Claude-SearchBot
-Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Applebot-Extended
-Allow: /
-
-User-agent: meta-externalagent
-Allow: /
-
-User-agent: Amazonbot
-Allow: /
-
-User-agent: CCBot
-Allow: /
 
 Sitemap: https://shokomaedako.com/sitemap.xml
