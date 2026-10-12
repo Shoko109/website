@@ -44,17 +44,17 @@ The CMS is git-based: edits in `/admin` become commits to GitHub, which trigger 
    - Permissions → Repository permissions → **Contents: Read and write** (add **Pull requests: Read and write** only if you ever enable editorial workflow)
    - Set a long expiry (or no expiry) so Shoko isn't locked out unexpectedly
    - Paste the token into the sign-in dialog; the browser remembers it on that device.
-3. **Contact form**: currently **disabled** — see below.
+3. **Contact form**: connected to **Web3Forms** — see below.
 
-### Contact form (currently off)
+### Contact form (Web3Forms)
 
-Cloudflare Pages has no equivalent of Netlify Forms, so `/contact/` shows the form greyed out behind a notice pointing at `tsurupia@gmail.com`. The switch is one line at the top of `src/pages/contact.astro`:
+The existing `/contact/` form posts directly from the visitor's browser to `https://api.web3forms.com/submit`, using the free Web3Forms plan. No Cloudflare Function or server-side mail service is required.
 
-```js
-const FORM_ENABLED = false;   // ← true to turn the form back on
-```
+The form access key is set in `src/pages/contact.astro` as `WEB3FORMS_ACCESS_KEY`. This is a public form identifier intended for browser-side use, not a secret account API key. To change the recipient, configure the form in Web3Forms or replace this key with the access key for another form.
 
-Turning it on needs somewhere for submissions to go. The form already posts to `/api/contact`, so the shape is: add `functions/api/contact.js` (a Pages Function — Cloudflare picks up a top-level `functions/` directory automatically), validate the fields plus the `bot-field` honeypot, relay to a mail service (Web3Forms, Formspree, Resend…) with the API key kept in a Cloudflare env var, then redirect to `/thanks/`.
+All existing Japanese fields are retained. The email input uses `name="email"` so Web3Forms sets the sender's address as Reply-To. A hidden `botcheck` checkbox provides honeypot spam protection. Successful submissions redirect to the existing Japanese `/thanks/` page; the absolute redirect URL uses the configured Astro `site` URL.
+
+After deploying, submit a test through the live form and confirm both the redirect and delivery to the recipient inbox.
 
 Optional later upgrade for one-button login ("Sign in with GitHub", no token to manage): create a GitHub OAuth app and point Sveltia at an OAuth proxy — this needs a small Worker, so the access token is the simpler option while the site is small.
 
