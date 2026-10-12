@@ -15,7 +15,7 @@ Astro static site for Tsurukawa Harunasaka Piano School with a small CMS at **`/
 | `wrangler.toml`, `.node-version` | Cloudflare Pages build config |
 | `編集ガイド.md` | Editing guide for Shoko, in Japanese (how to use /admin) |
 
-URLs are now directory-style: `/profile/`, `/contact/`, `/thanks/` (was `profile.html` etc.).
+URLs are now directory-style: `/profile/`, `/contact/`, `/thanks/` (was `profile.html` etc.). `public/_redirects` permanently redirects the old `.html` page addresses to their replacements on Cloudflare Pages.
 
 ## Develop / build
 

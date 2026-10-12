@@ -1,6 +1,7 @@
 {
   "intro": "チケットのお問い合わせは、お名前と枚数を明記の上、tsurupia@gmail.comまでお願いいたします。",
-  "upcoming": [
+  "upcoming": [],
+  "past": [
     {
       "date": "2026年10月4日(日)",
       "time": "14:00開演（13:30開場）",
@@ -13,11 +14,9 @@
         "シューマン=リスト : 献呈　S.566 R.253",
         "ショパン : 舟歌 嬰ヘ長調 Op.60"
       ],
-      "link": "チケットはtsurupia@gmail.comまで。お名前と枚数をお知らせください。",
-      "linkLabel": "詳細・チケット　mailto:tsurupia@gmail.com"
-    }
-  ],
-  "past": [
+      "link": "mailto:tsurupia@gmail.com",
+      "linkLabel": "お問い合わせ"
+    },
     {
       "date": "2026年2月7日(土)",
       "time": "13:40開場  14:00開演",
